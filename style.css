@@ -1,36 +1,41 @@
-/* Custom animations for the Digital Twin */
+/* style.css */
 body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Stable breathing animation */
-.glow-stable {
+/* Animations for the Digital Twin States */
+.pulse-stable {
     animation: breathe 4s infinite ease-in-out;
 }
 
-/* High risk warning animation */
-.glow-warning {
-    background-color: #f43f5e !important; /* Rose-500 */
-    animation: panic 0.6s infinite ease-in-out;
-    opacity: 0.6 !important;
+.pulse-warning {
+    background-color: #f59e0b !important; /* Amber */
+    animation: alert 1.5s infinite ease-in-out;
+    opacity: 0.3 !important;
+}
+
+.pulse-risk {
+    background-color: #ef4444 !important; /* Red */
+    animation: panic 0.5s infinite ease-in-out;
+    opacity: 0.5 !important;
 }
 
 @keyframes breathe {
-    0%, 100% { transform: scale(1); opacity: 0.2; }
-    50% { transform: scale(1.1); opacity: 0.3; }
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.2); opacity: 0.25; }
+}
+
+@keyframes alert {
+    0%, 100% { transform: scale(1.1); filter: blur(40px); }
+    50% { transform: scale(1.3); filter: blur(60px); }
 }
 
 @keyframes panic {
-    0%, 100% { transform: scale(1.1); filter: blur(60px); }
-    50% { transform: scale(1.3); filter: blur(90px); }
+    0%, 100% { transform: scale(1.2); filter: blur(50px); }
+    50% { transform: scale(1.4); filter: blur(80px); }
 }
 
-/* Card transition effect */
-#insight-card {
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.risk-border {
-    border-color: rgba(244, 63, 94, 0.5) !important;
-    background: rgba(244, 63, 94, 0.05) !important;
-}
+/* Scrollbar styling to keep the slate vibe */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }

@@ -1,54 +1,90 @@
 // script.js
 
-function runScenario(type) {
-    const glow = document.getElementById('twin-glow');
-    const core = document.getElementById('twin-core');
-    const icon = document.getElementById('twin-icon');
-    const statusDot = document.getElementById('status-dot');
-    const statusText = document.getElementById('status-text');
-    const predictionMsg = document.getElementById('prediction-msg');
-    const riskPercent = document.getElementById('risk-percent');
-    const card = document.getElementById('insight-card');
+// Global State
+let context = {
+    mood: 'happy',
+    location: 'home',
+    budget: 300
+};
 
-    if (type === 'risk') {
-        // TRIGGER INTERVENTION
-        glow.className = "absolute w-64 h-64 bg-rose-500 rounded-full glow-warning transition-all duration-1000";
-        core.style.borderColor = "#f43f5e";
-        core.style.boxShadow = "0 0 40px rgba(244, 63, 94, 0.4)";
-        icon.style.color = "#f43f5e";
-        
-        statusDot.className = "h-2 w-2 bg-rose-500 rounded-full animate-ping";
-        statusText.innerText = "Intervention Active";
-        statusText.className = "text-xs font-bold text-rose-500 uppercase tracking-widest";
-        
-        predictionMsg.innerText = "Pattern Detected: You are near 'The Coffee House' at a high-stress time. Prediction: ₹250 impulsive splurge. Action: Drink the water in your bag.";
-        
-        riskPercent.innerText = "88%";
-        riskPercent.className = "text-xl font-bold text-rose-500";
-        
-        card.classList.add('risk-border');
-        
-    } else {
-        // RESET TO SAFE
-        glow.className = "absolute w-64 h-64 bg-emerald-500 rounded-full blur-[80px] opacity-20 glow-stable transition-all duration-1000";
-        core.style.borderColor = "#10b981";
-        core.style.boxShadow = "0 0 30px rgba(16,185,129,0.2)";
-        icon.style.color = "#10b981";
-        
-        statusDot.className = "h-2 w-2 bg-emerald-500 rounded-full animate-pulse";
-        statusText.innerText = "Model Stable";
-        statusText.className = "text-xs font-bold text-emerald-500 uppercase tracking-widest";
-        
-        predictionMsg.innerText = "Your spending patterns are currently optimized for your ₹10000 savings goal.";
-        
-        riskPercent.innerText = "2%";
-        riskPercent.className = "text-xl font-bold text-emerald-500";
-        
-        card.classList.remove('risk-border');
+function updateContext(key, value, element = null) {
+    context[key] = value;
+    
+    if (key === 'mood' && element) {
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.classList.remove('border-blue-500', 'bg-blue-900/10');
+        });
+        element.classList.add('border-blue-500', 'bg-blue-900/10');
+    }
+    
+    if (key === 'budget') {
+        document.getElementById('budget-display').innerText = `Remaining Budget: $${parseFloat(value).toFixed(2)}`;
     }
 }
 
-// Initialize breathing on load
-window.onload = () => {
-    document.getElementById('twin-glow').classList.add('glow-stable');
-};
+function runSync() {
+    const glow = document.getElementById('twin-glow');
+    const core = document.getElementById('twin-core');
+    const icon = document.getElementById('twin-icon');
+    const label = document.getElementById('risk-label');
+    const msg = document.getElementById('prediction-msg');
+    const rate = document.getElementById('fail-rate');
+    const spend = document.getElementById('predicted-spend');
+    const alertBox = document.getElementById('intervention-alert');
+    const suggestionText = document.getElementById('suggestion-text');
+
+    // 1. Calculate Risk Score (0-100)
+    let riskScore = 5; // Base risk
+    if (context.mood === 'stressed') riskScore += 45;
+    if (context.mood === 'bored') riskScore += 25;
+    if (context.location === 'mall') riskScore += 30;
+    if (context.location === 'online') riskScore += 20;
+    if (context.budget < 100) riskScore += 15;
+
+    // 2. Map Score to UI State
+    glow.className = "absolute w-48 h-48 rounded-full transition-all duration-700";
+    alertBox.classList.add('hidden');
+
+    if (riskScore >= 70) {
+        // CRITICAL RISK
+        glow.classList.add('pulse-risk');
+        core.style.borderColor = "#ef4444";
+        icon.className = "w-12 h-12 text-red-500";
+        label.innerText = "CRITICAL RISK";
+        label.className = "text-[10px] font-black uppercase tracking-[0.3em] text-red-500";
+        msg.innerText = "Twin detected high Emotional + Environmental risk. $80.00 splurge predicted within the next hour.";
+        rate.innerText = riskScore + "%";
+        rate.className = "text-4xl font-bold text-red-500";
+        spend.innerText = "$84.50";
+        spend.className = "text-4xl font-bold text-red-500";
+        
+        alertBox.classList.remove('hidden');
+        suggestionText.innerText = "Intervention: Lock 'Shopping' category and transfer $60 to your Savings Vault immediately.";
+    } 
+    else if (riskScore >= 35) {
+        // WARNING STATE
+        glow.classList.add('pulse-warning');
+        core.style.borderColor = "#f59e0b";
+        icon.className = "w-12 h-12 text-amber-500";
+        label.innerText = "RISK WARNING";
+        label.className = "text-[10px] font-black uppercase tracking-[0.3em] text-amber-500";
+        msg.innerText = "Model is fluctuating. Proximity to spending triggers detected. Predicted splurge: $25.00.";
+        rate.innerText = riskScore + "%";
+        rate.className = "text-4xl font-bold text-amber-500";
+        spend.innerText = "$22.00";
+        spend.className = "text-4xl font-bold text-amber-500";
+    } 
+    else {
+        // STABLE STATE
+        glow.classList.add('pulse-stable', 'bg-blue-500', 'blur-[70px]', 'opacity-10');
+        core.style.borderColor = "rgba(59, 130, 246, 0.5)";
+        icon.className = "w-12 h-12 text-blue-400";
+        label.innerText = "MODEL STABLE";
+        label.className = "text-[10px] font-black uppercase tracking-[0.3em] text-blue-400";
+        msg.innerText = "Reality Synced. Your current context and mood are perfectly aligned with your savings goal.";
+        rate.innerText = riskScore + "%";
+        rate.className = "text-4xl font-bold text-emerald-500";
+        spend.innerText = "$0.00";
+        spend.className = "text-4xl font-bold text-emerald-500";
+    }
+}
