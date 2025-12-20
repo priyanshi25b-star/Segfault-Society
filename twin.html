@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Twin | Habit Hackathon</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+
+<div class="w-full max-w-sm bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-xl">
+    <div class="flex justify-between items-start mb-4">
+        <div>
+            <h2 id="status-title" class="text-2xl font-bold text-green-400">Budget Synced</h2>
+            <p id="status-desc" class="text-slate-400 text-sm mt-1">Twin predicts 95% chance of staying under budget today.</p>
+        </div>
+        <div id="balance-display" class="text-right">
+            <span class="text-xs text-slate-500 uppercase">Remaining</span>
+            <p class="text-xl font-mono font-bold">₹10000.00</p>
+        </div>
+    </div>
+    
+    <div class="w-full bg-slate-700 h-2 rounded-full mb-6 overflow-hidden">
+        <div id="budget-bar" class="bg-green-500 h-full w-[30%] transition-all duration-1000"></div>
+    </div>
+
+    <button onclick="triggerIntervention()" class="w-full bg-indigo-600 py-3 rounded-xl font-bold hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20">
+        Simulate Weekend Pattern
+    </button>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
