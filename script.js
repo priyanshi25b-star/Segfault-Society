@@ -18,7 +18,7 @@ function updateContext(key, value, element = null) {
     }
     
     if (key === 'budget') {
-        document.getElementById('budget-display').innerText = `Remaining Budget: $${parseFloat(value).toFixed(2)}`;
+        document.getElementById('budget-display').innerText = `Remaining Budget: ₹${parseFloat(value).toFixed(2)}`;
     }
 }
 
@@ -39,7 +39,7 @@ function runSync() {
     if (context.mood === 'bored') riskScore += 25;
     if (context.location === 'mall') riskScore += 30;
     if (context.location === 'online') riskScore += 20;
-    if (context.budget < 100) riskScore += 15;
+    if (context.budget < 1000) riskScore += 15;
 
     // 2. Map Score to UI State
     glow.className = "absolute w-48 h-48 rounded-full transition-all duration-700";
@@ -52,10 +52,10 @@ function runSync() {
         icon.className = "w-12 h-12 text-red-500";
         label.innerText = "CRITICAL RISK";
         label.className = "text-[10px] font-black uppercase tracking-[0.3em] text-red-500";
-        msg.innerText = "Twin detected high Emotional + Environmental risk. $80.00 splurge predicted within the next hour.";
+        msg.innerText = "Twin detected high Emotional + Environmental risk. ₹2000.00 splurge predicted within the next hour.";
         rate.innerText = riskScore + "%";
         rate.className = "text-4xl font-bold text-red-500";
-        spend.innerText = "$84.50";
+        spend.innerText = "₹2500";
         spend.className = "text-4xl font-bold text-red-500";
         
         alertBox.classList.remove('hidden');
@@ -68,10 +68,10 @@ function runSync() {
         icon.className = "w-12 h-12 text-amber-500";
         label.innerText = "RISK WARNING";
         label.className = "text-[10px] font-black uppercase tracking-[0.3em] text-amber-500";
-        msg.innerText = "Model is fluctuating. Proximity to spending triggers detected. Predicted splurge: $25.00.";
+        msg.innerText = "Model is fluctuating. Proximity to spending triggers detected. Predicted splurge: ₹1000.00.";
         rate.innerText = riskScore + "%";
         rate.className = "text-4xl font-bold text-amber-500";
-        spend.innerText = "$22.00";
+        spend.innerText = "₹1500.00";
         spend.className = "text-4xl font-bold text-amber-500";
     } 
     else {
